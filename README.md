@@ -19,16 +19,11 @@ lazy val api = Project(
   // disable ScroogeSBT in case of multi-project usage.
   //.disablePlugins(ScroogeSBT)
   .settings(
-    thriftDirectory := {
-      baseDirectory.value / "src" / "main" / "thrift"
-    },
-    thriftIDLFiles := {
-      (thriftDirectory.value ** "*.thrift").get
-    },
+    thriftDirectory := baseDirectory.value / "src" / "main" / "thrift",
+    thriftIDLFiles := (thriftDirectory.value ** "*.thrift").get,
     // pack only thrift files in resulting artifact.
-    mappings in (Compile, packageBin) := {
+    mappings in (Compile, packageBin) :=
       thriftIDLFiles.value map { thriftFile => (thriftFile, thriftFile.name) }
-    }
   )
 ```
 
@@ -66,9 +61,8 @@ lazy val service = Project(
     // extract thrift files from jar.
     scroogeThriftDependencies in Compile := Seq("api_2.11"),
     // compile thrift files from jar/
-    scroogeThriftSources in Compile ++= {
+    scroogeThriftSources in Compile ++=
       (scroogeUnpackDeps in Compile).value.flatMap { dir => (dir ** "*.thrift").get }
-    }
   )
 ```
 

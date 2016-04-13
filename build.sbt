@@ -20,15 +20,10 @@ lazy val api = Project(
   ))
   .disablePlugins(ScroogeSBT)
   .settings(
-    thriftDirectory := {
-      baseDirectory.value / "src" / "main" / "thrift"
-    },
-    thriftIDLFiles := {
-      (thriftDirectory.value ** "*.thrift").get
-    },
-    mappings in (Compile, packageBin) := {
+    thriftDirectory := baseDirectory.value / "src" / "main" / "thrift",
+    thriftIDLFiles := (thriftDirectory.value ** "*.thrift").get,
+    mappings in (Compile, packageBin) :=
       thriftIDLFiles.value map { thriftFile => (thriftFile, thriftFile.name) }
-    }
   )
 
 lazy val service = Project(
@@ -46,7 +41,6 @@ lazy val service = Project(
   ))
   .settings(
     scroogeThriftDependencies in Compile := Seq("api_2.11"),
-    scroogeThriftSources in Compile ++= {
+    scroogeThriftSources in Compile ++=
       (scroogeUnpackDeps in Compile).value.flatMap { dir => (dir ** "*.thrift").get }
-    }
   )
