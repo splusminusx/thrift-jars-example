@@ -1,4 +1,4 @@
-# Thrift Jars Example
+# Thrift-Only-Jar Example
 
 Example of Thrift-only-jar dependencies.
 
